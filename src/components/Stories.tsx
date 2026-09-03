@@ -40,6 +40,12 @@ export default function Stories() {
                     {tag}
                   </span>
                 ))}
+                <span
+                  className="rounded-full border border-gold/50 bg-gold/10 px-2.5 py-1 text-[11px] font-bold text-gold-foreground"
+                  title={`${t.stories.ageOf}: ${t.stories.ages[i]}`}
+                >
+                  {t.stories.ages[i]}
+                </span>
               </div>
               <h3 className="mt-3 text-lg font-extrabold">{s.title}</h3>
               <p className="mt-1 text-sm text-muted-foreground">{s.sub}</p>

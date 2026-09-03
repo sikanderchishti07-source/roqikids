@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { CheckCircle2, Minus, Plus, ShoppingBag, Trash2, X } from "lucide-react";
 import { useCart, type CartItem } from "../lib/cart";
@@ -92,6 +92,8 @@ export default function CartDrawer() {
   const { isOpen, closeCart, items, count, subtotal, totalSave, pushToast } = useCart();
   const { lang, dir, t } = useI18n();
   const reduced = useReducedMotion();
+  const asideRef = useRef<HTMLElement>(null);
+  const closeRef = useRef<HTMLButtonElement>(null);
 
   // lock page scroll + close on Escape
   useEffect(() => {
@@ -101,9 +103,28 @@ export default function CartDrawer() {
     };
   }, [isOpen]);
 
+  // Escape to close + simple focus trap while the drawer is open
   useEffect(() => {
     if (!isOpen) return;
-    const onKey = (e: KeyboardEvent) => e.key === "Escape" && closeCart();
+    closeRef.current?.focus();
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") closeCart();
+      if (e.key === "Tab" && asideRef.current) {
+        const nodes = asideRef.current.querySelectorAll<HTMLElement>(
+          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+        );
+        if (!nodes.length) return;
+        const first = nodes[0];
+        const last = nodes[nodes.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
+    };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [isOpen, closeCart]);
@@ -145,6 +166,7 @@ export default function CartDrawer() {
           />
           <motion.aside
             key="drawer"
+            ref={asideRef}
             role="dialog"
             aria-modal="true"
             aria-label={t.cart.drawerLabel}
@@ -169,6 +191,7 @@ export default function CartDrawer() {
               </div>
               <button
                 type="button"
+                ref={closeRef}
                 onClick={closeCart}
                 aria-label={t.cart.close}
                 className="btn-base grid size-9 place-items-center rounded-full border border-border bg-card text-primary hover:border-gold/60"

@@ -57,6 +57,69 @@ html[dir="ltr"] .progress-fill {
   background-image: linear-gradient(to right, #b8842b, #d9a741, #e7c26c);
 }
 
+/* ---------- accessibility ---------- */
+:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+.skip-link {
+  position: fixed;
+  top: -80px;
+  inset-inline-start: 16px;
+  z-index: 100;
+  background: var(--color-primary);
+  color: var(--color-primary-foreground);
+  padding: 10px 18px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 14px;
+  box-shadow: var(--shadow-lift);
+  transition: top 0.3s ease;
+}
+.skip-link:focus {
+  top: 14px;
+}
+
+/* ---------- orders ticker ---------- */
+.ticker-track {
+  width: max-content;
+  animation: tickerScroll 32s linear infinite;
+}
+.ticker:hover .ticker-track {
+  animation-play-state: paused;
+}
+@keyframes tickerScroll {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* ---------- 3D preview book ---------- */
+.book-scene {
+  perspective: 1300px;
+}
+.book-3d {
+  transform-style: preserve-3d;
+  transition: transform 0.5s cubic-bezier(0.22, 0.61, 0.36, 1);
+  will-change: transform;
+}
+.book-pages {
+  position: absolute;
+  top: 8px;
+  bottom: 8px;
+  inset-inline-end: -9px;
+  width: 9px;
+  border-radius: 2px;
+  background: repeating-linear-gradient(
+    to bottom,
+    #fffaf0 0 2px,
+    #eadfc6 2px 3px
+  );
+  transform: translateZ(-4px);
+}
+
 body {
   font-family: var(--font-sans);
   background-color: var(--color-background);

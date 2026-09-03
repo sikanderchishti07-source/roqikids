@@ -69,7 +69,7 @@ function BackToTop() {
       onClick={toTop}
       aria-label={t.backToTop}
       className={cn(
-        "btn-base btn-sheen btn-primary fixed bottom-5 end-5 z-50 grid size-11 place-items-center rounded-full bg-primary text-primary-foreground shadow-lift transition-all duration-500 hover:bg-primary/90",
+        "btn-base btn-sheen btn-primary fixed bottom-24 end-5 z-50 grid size-11 place-items-center rounded-full bg-primary text-primary-foreground shadow-lift transition-all duration-500 hover:bg-primary/90 md:bottom-5",
         visible ? "translate-y-0 opacity-100" : "pointer-events-none translate-y-6 opacity-0"
       )}
     >

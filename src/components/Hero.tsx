@@ -1,8 +1,8 @@
 import type { CSSProperties, FC } from "react";
 import { Check, Sparkles } from "lucide-react";
 import Reveal from "./Reveal";
-import SmartImage from "./SmartImage";
-import { heroCovers, pageUrl, trustIconKeys } from "../lib/data";
+import NamePreview from "./NamePreview";
+import { pageUrl, trustIconKeys } from "../lib/data";
 import { useI18n } from "../lib/i18n";
 
 type IconFn = FC<{ className?: string }>;
@@ -111,24 +111,9 @@ export default function Hero() {
           </Reveal>
         </div>
 
-        {/* floating cover grid */}
+        {/* interactive name-on-cover preview */}
         <Reveal variant="fade" delay={250} className="relative">
-          <div className="grid grid-cols-2 gap-4">
-            {heroCovers.map((c, i) => (
-              <div key={c.src} className="floaty group" style={{ animationDelay: `${i * 0.9}s` }}>
-                <SmartImage
-                  src={c.src}
-                  alt={t.hero.covers[i]}
-                  eager={c.eager}
-                  className={
-                    "w-full rounded-2xl shadow-card transition-transform duration-500 group-hover:scale-[1.02] " +
-                    (c.offset ? "md:translate-y-4" : "")
-                  }
-                  imgClassName="aspect-[3/4]"
-                />
-              </div>
-            ))}
-          </div>
+          <NamePreview />
         </Reveal>
       </div>
 

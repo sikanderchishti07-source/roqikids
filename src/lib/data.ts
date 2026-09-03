@@ -61,3 +61,22 @@ export const navHrefs = [
   { href: "#packages", key: "packages" },
   { href: "#testimonials", key: "testimonials" },
 ] as const;
+
+/* ---------------- generated artwork ---------------- */
+
+export const IMG = {
+  interior1:
+    "https://image.qwenlm.ai/generated-images/a53dbde8-dbc8-4906-9361-d3b5c429791b/_result.png",
+  interior2:
+    "https://image.qwenlm.ai/generated-images/6977e314-50e0-49d7-bb5a-799181f5fa89/_result.png",
+  childPhoto:
+    "https://image.qwenlm.ai/generated-images/acca778f-2048-44d8-b1ff-8c16c2e808e0/_result.png",
+  childIllustration:
+    "https://image.qwenlm.ai/generated-images/c033ebb1-0fab-4050-9430-8f7fb2c78761/_result.png",
+};
+
+export const occasionIconKeys = ["cake", "medal", "moon", "school"];
+
+export const WHATSAPP_URL =
+  "https://wa.me/966500000000?text=" +
+  encodeURIComponent("مرحبًا رُقي 👋 أرغب في طلب قصة مخصصة لطفلي");
