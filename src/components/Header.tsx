@@ -83,6 +83,20 @@ export default function Header() {
         hidden && !open && "-translate-y-full"
       )}
     >
+      {/* promo bar */}
+      <div
+        className={cn(
+          "overflow-hidden bg-primary text-primary-foreground transition-all duration-500",
+          scrolled ? "max-h-0" : "max-h-16"
+        )}
+      >
+        <p className="mx-auto flex min-h-9 max-w-6xl flex-wrap items-center justify-center gap-x-2 gap-y-0.5 px-4 py-1.5 text-center text-[11px] font-bold leading-5 sm:text-xs">
+          <span className="text-gold" aria-hidden="true">✦</span>
+          {t.hero.promo}
+          <span className="rounded-md bg-gold/20 px-2 py-0.5 tracking-wider text-gold">{t.hero.promoCode}</span>
+        </p>
+      </div>
+
       <div
         className={cn(
           "mx-auto flex max-w-6xl items-center justify-between gap-2 px-4 transition-all duration-500",

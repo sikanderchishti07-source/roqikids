@@ -5,6 +5,7 @@ import Header from "./components/Header";
 import Hero from "./components/Hero";
 import Steps from "./components/Steps";
 import Stories from "./components/Stories";
+import Stats from "./components/Stats";
 import WhyLove from "./components/WhyLove";
 import Sizes from "./components/Sizes";
 import Testimonials from "./components/Testimonials";
@@ -30,6 +31,7 @@ export default function App() {
               <Hero />
               <Steps />
               <Stories />
+              <Stats />
               <WhyLove />
               <Sizes />
               <Testimonials />
