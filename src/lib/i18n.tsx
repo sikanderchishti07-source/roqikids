@@ -108,8 +108,6 @@ const ar = {
     details: "التفاصيل",
     coverOf: "غلاف قصة",
     all: "شاهد كل الحكايات",
-    ageOf: "الفئة العمرية",
-    ages: ["٣-٦ سنوات", "٤-٨ سنوات", "٤-٨ سنوات", "٣-٦ سنوات", "٣-٦ سنوات", "٣-٦ سنوات"],
     items: [
       { title: "الأميرة الشجاعة", sub: "مغامرة في قصر الورود", tags: ["شجاعة", "ثقة بالنفس"], alt: "غلاف قصة الأميرة الشجاعة" },
       { title: "القبطان الصغير", sub: "رحلة بحرية إلى جزيرة الفنار", tags: ["مغامرة", "بحر"], alt: "غلاف قصة القبطان الصغير" },
@@ -179,129 +177,6 @@ const ar = {
     love: "قصص مخصصة تُصنع بحب، صفحة بصفحة.",
   },
   backToTop: "العودة إلى الأعلى",
-  skipLink: "تخطَّ إلى المحتوى",
-  namePreview: {
-    pill: "✦ جرّبها الآن",
-    label: "اكتب اسم طفلك وشاهد الغلاف",
-    placeholder: "مثال: آسيل",
-    fallback: "طفلك",
-    coverKicker: "قصة مصوّرة خاصة بـ",
-    coverTitle: (name: string) => `مغامرة ${name}`,
-    coverFooter: "٢٠ صفحة · بطلها طفلك",
-    try: "جرّب:",
-    names: ["آسيل", "كريم", "نورة"],
-    hint: "هكذا ستبدو قصة طفلك باسمه على الغلاف.",
-  },
-  ticker: {
-    ariaLabel: "طلبات حديثة من عائلات",
-    items: [
-      { text: "عائلة يوسف اختارت «الأميرة الشجاعة»", time: "منذ ساعة" },
-      { text: "عائلة ليان طلبت «رحلة إلى مدينة الأحلام»", time: "منذ ٣ ساعات" },
-      { text: "عائلة آدم اختارت «القبطان الصغير»", time: "منذ ٥ ساعات" },
-      { text: "عائلة نورة طلبت باقة ٣ قصص كبيرة", time: "اليوم" },
-      { text: "عائلة كريم اختارت «رحلة الديناصورات»", time: "أمس" },
-      { text: "عائلة جنى طلبت «الفنانة الصغيرة»", time: "أمس" },
-    ],
-  },
-  beforeAfter: {
-    pill: "● سحر رُقي",
-    title: "من صورة… إلى بطل حكاية",
-    sub: "صورة واحدة واضحة تكفي ليحوّل فنانونا ملامح طفلك إلى شخصية مصوّرة داخل المغامرة.",
-    before: "صورة طفلك",
-    after: "شخصيته في القصة",
-    sliderLabel: "قارن بين صورة طفلك وشخصيته المرسومة",
-    dragHint: "اسحب المقبض لترى التحوّل",
-  },
-  samples: {
-    pill: "● من داخل الكتاب",
-    title: "صفحات حقيقية… لا مجرد غلاف",
-    sub: "كل قصة ٢٠ صفحة مصوّرة كاملة، بطلها طفلك في كل مشهد.",
-    hint: "مرّر لاستعراض الصفحات",
-    captions: ["مشهد من «الأميرة الشجاعة»", "مشهد من «القبطان الصغير»"],
-  },
-  stats: {
-    band: "رُقي بالأرقام",
-    items: [
-      { value: 850, suffix: "+", decimal: false, label: "قصة صُنعت بحب" },
-      { value: 98, suffix: "٪", decimal: false, label: "عائلات أوصت بنا" },
-      { value: 4.9, suffix: "", decimal: true, label: "متوسط تقييم العائلات" },
-      { value: 20, suffix: "", decimal: false, label: "صفحة في كل قصة" },
-    ],
-  },
-  occasions: {
-    pill: "● لكل مناسبة",
-    title: "هدية تناسب كل لحظة فرح",
-    sub: "أي مناسبة تختارها… القصة المخصصة تجعلها ذكرى لا تُنسى.",
-    items: [
-      { title: "أعياد الميلاد", body: "هدية الميلاد التي سيتذكرها طفلك كل عام." },
-      { title: "النجاح والتفوق", body: "احتفل بإنجازه الأول بقصة بطولتها له." },
-      { title: "العيد والمناسبات", body: "هدية عيد مختلفة عن كل الهدايا." },
-      { title: "أول يوم مدرسة", body: "شجّعه على القراءة من أول يوم." },
-    ],
-  },
-  faq: {
-    pill: "● أسئلة شائعة",
-    title: "كل ما تريد معرفته",
-    sub: "لم تجد سؤالك؟ راسلنا على واتساب وسنرد خلال دقائق.",
-    items: [
-      {
-        q: "كيف أرسل صورة طفلي؟ وما المواصفات المطلوبة؟",
-        a: "بعد إضافة القصة إلى السلة تصلك صفحة الطلب لرفع صورة واحدة واضحة لوجه طفلك. نفضّل إضاءة جيدة وخلفية بسيطة، ولا نحتاج صورًا كاملة للجسم.",
-      },
-      {
-        q: "هل القصة بالعربية أم الإنجليزية؟",
-        a: "تختار اللغة أثناء الطلب — العربية، أو أي لغة أجنبية مثل الإنجليزية بإضافة ٥ ريال فقط.",
-      },
-      {
-        q: "هل أراجع التصميم قبل الطباعة؟",
-        a: "نعم، نرسل لك معاينة رقمية للغلاف والشخصية لتأكيدها قبل بدء الطباعة.",
-      },
-      {
-        q: "كم يستغرق التنفيذ والتوصيل؟",
-        a: "ننفّذ القصة خلال ٣-٤ أيام عمل، وتصلك خلال ٧-٨ أيام داخل السعودية، والشحن مجاني للقصة الواحدة.",
-      },
-      {
-        q: "هل يمكن تنفيذ الباقة لأكثر من طفل؟",
-        a: "نعم، باقات الـ٣ قصص يمكن تقسيمها على أطفال مختلفين — تضيف اسم كل طفل وصورته عند الطلب.",
-      },
-      {
-        q: "ماذا لو لم تعجبني الشخصية؟",
-        a: "نعيد رسم الشخصية حتى تكون راضيًا تمامًا قبل الطباعة، لأن رضاكم جزء من القصة.",
-      },
-    ],
-  },
-  sibling: {
-    pill: "● خصم الإخوة",
-    title: "قصة لكل طفل… وخصم يكبر معكم",
-    sub: "أضف أسماء أطفالك واحصل على خصم تلقائي: قصتان ١٠٪، وثلاث قصص ٢٠٪.",
-    childLabel: "الطفل",
-    namePlaceholder: "اسم الطفل",
-    addAnother: "أضف طفلًا آخر",
-    removeChild: "إزالة الطفل",
-    maxNote: "الحد الأقصى ٣ أطفال لكل طلب",
-    sizeLabel: "المقاس",
-    perBook: "للقصة الواحدة",
-    discount: "الخصم",
-    total: "الإجمالي",
-    youSave: "وفّرت",
-    needName: "أدخل اسم طفل واحد على الأقل",
-    addBtn: (n: number) =>
-      n === 1 ? "أضف القصة إلى السلة" : `أضف ${arNum(n)} قصص إلى السلة`,
-    cartTitle: (n: number) => `قصص مخصصة (${arNum(n)})`,
-    cartDesc: (size: string) => `مقاس ${size} · أسماء متعددة`,
-  },
-  stickyCta: {
-    price: "تبدأ من",
-    amount: "٦٥ ر.س",
-    button: "اصنع قصته الآن",
-  },
-  whatsapp: {
-    ariaLabel: "اطلب عبر واتساب",
-  },
-  payment: {
-    title: "دفع آمن ومرن عبر المتجر",
-    note: "جميع الطلبات تُعالَج عبر متجرنا الآمن بإحدى هذه الوسائل",
-  },
 };
 
 function arNum(n: number) {
@@ -397,8 +272,6 @@ const en = {
     details: "Details",
     coverOf: "Cover of",
     all: "View all stories",
-    ageOf: "Age range",
-    ages: ["Ages 3–6", "Ages 4–8", "Ages 4–8", "Ages 3–6", "Ages 3–6", "Ages 3–6"],
     items: [
       { title: "The Brave Princess", sub: "An adventure in the Rose Palace", tags: ["Courage", "Confidence"], alt: "Cover of The Brave Princess story" },
       { title: "The Little Captain", sub: "A sea voyage to Lighthouse Island", tags: ["Adventure", "Sea"], alt: "Cover of The Little Captain story" },
@@ -468,128 +341,6 @@ const en = {
     love: "Custom stories made with love, page by page.",
   },
   backToTop: "Back to top",
-  skipLink: "Skip to content",
-  namePreview: {
-    pill: "✦ Try it now",
-    label: "Type your child's name and watch the cover",
-    placeholder: "e.g. Aseel",
-    fallback: "Your child",
-    coverKicker: "A picture story just for",
-    coverTitle: (name: string) => `${name}'s Adventure`,
-    coverFooter: "20 pages · your child is the hero",
-    try: "Try:",
-    names: ["Aseel", "Karim", "Noura"],
-    hint: "This is how your child's story will look with their name on the cover.",
-  },
-  ticker: {
-    ariaLabel: "Recent orders from families",
-    items: [
-      { text: "Yousuf's family picked “The Brave Princess”", time: "1 hour ago" },
-      { text: "Layan's family ordered “Journey to Dream City”", time: "3 hours ago" },
-      { text: "Adam's family picked “The Little Captain”", time: "5 hours ago" },
-      { text: "Noura's family ordered the 3-book A4 bundle", time: "today" },
-      { text: "Karim's family picked “The Dinosaur Journey”", time: "yesterday" },
-      { text: "Jana's family ordered “The Little Artist”", time: "yesterday" },
-    ],
-  },
-  beforeAfter: {
-    pill: "● The Ruqi magic",
-    title: "From a photo… to a story hero",
-    sub: "One clear photo is all our artists need to turn your child's features into an illustrated character inside the adventure.",
-    before: "Your child's photo",
-    after: "Their story character",
-    sliderLabel: "Compare your child's photo with their illustrated character",
-    dragHint: "Drag the handle to see the transformation",
-  },
-  samples: {
-    pill: "● Inside the book",
-    title: "Real pages… not just a cover",
-    sub: "Every story is 20 fully illustrated pages, with your child starring in every scene.",
-    hint: "Scroll to browse the pages",
-    captions: ["A scene from “The Brave Princess”", "A scene from “The Little Captain”"],
-  },
-  stats: {
-    band: "Ruqi in numbers",
-    items: [
-      { value: 850, suffix: "+", decimal: false, label: "stories lovingly crafted" },
-      { value: 98, suffix: "%", decimal: false, label: "of families recommend us" },
-      { value: 4.9, suffix: "", decimal: true, label: "average family rating" },
-      { value: 20, suffix: "", decimal: false, label: "pages in every story" },
-    ],
-  },
-  occasions: {
-    pill: "● For every occasion",
-    title: "A gift for every joyful moment",
-    sub: "Whatever the occasion, a personalized story turns it into an unforgettable memory.",
-    items: [
-      { title: "Birthdays", body: "The birthday gift your child will remember every year." },
-      { title: "Achievements", body: "Celebrate their first milestone with a story they star in." },
-      { title: "Eid & holidays", body: "A festive gift unlike all the rest." },
-      { title: "First day of school", body: "Spark a love of reading from day one." },
-    ],
-  },
-  faq: {
-    pill: "● FAQ",
-    title: "Everything you need to know",
-    sub: "Can't find your question? Message us on WhatsApp and we'll reply within minutes.",
-    items: [
-      {
-        q: "How do I send my child's photo? What are the requirements?",
-        a: "After adding the story to your cart, the order page lets you upload one clear photo of your child's face. Good lighting and a simple background work best — full-body photos aren't needed.",
-      },
-      {
-        q: "Is the story in Arabic or English?",
-        a: "You choose the language at checkout — Arabic, or any foreign language such as English for an extra SAR 5.",
-      },
-      {
-        q: "Do I review the design before printing?",
-        a: "Yes. We send you a digital preview of the cover and character to confirm before printing begins.",
-      },
-      {
-        q: "How long do production and delivery take?",
-        a: "We craft the story within 3-4 business days, and it reaches you within 7-8 days inside Saudi Arabia. Shipping is free for a single story.",
-      },
-      {
-        q: "Can a bundle be made for more than one child?",
-        a: "Yes — the 3-story bundles can be split across different children. You add each child's name and photo at checkout.",
-      },
-      {
-        q: "What if I don't like the character?",
-        a: "We redraw the character until you're completely happy, before any printing — your satisfaction is part of the story.",
-      },
-    ],
-  },
-  sibling: {
-    pill: "● Sibling discount",
-    title: "A story for every child… and a discount that grows",
-    sub: "Add your children's names and get an automatic discount: 10% for two books, 20% for three.",
-    childLabel: "Child",
-    namePlaceholder: "Child's name",
-    addAnother: "Add another child",
-    removeChild: "Remove child",
-    maxNote: "Up to 3 children per order",
-    sizeLabel: "Size",
-    perBook: "per book",
-    discount: "Discount",
-    total: "Total",
-    youSave: "You save",
-    needName: "Enter at least one child's name",
-    addBtn: (n: number) => `Add ${n} book${n === 1 ? "" : "s"} to cart`,
-    cartTitle: (n: number) => `Custom stories (${n})`,
-    cartDesc: (size: string) => `Size ${size} · multiple names`,
-  },
-  stickyCta: {
-    price: "Starting at",
-    amount: "SAR 65",
-    button: "Create their story",
-  },
-  whatsapp: {
-    ariaLabel: "Order via WhatsApp",
-  },
-  payment: {
-    title: "Safe, flexible payment at checkout",
-    note: "All orders are processed through our secure store with",
-  },
 };
 
 export type Dict = Omit<typeof ar, "dir"> & { dir: "rtl" | "ltr" };
