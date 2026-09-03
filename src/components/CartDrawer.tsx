@@ -1,13 +1,8 @@
 import { useEffect } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { CheckCircle2, Minus, Plus, ShoppingBag, Trash2, X } from "lucide-react";
-import {
-  arabicNum,
-  countLabel,
-  formatSAR,
-  useCart,
-  type CartItem,
-} from "../lib/cart";
+import { useCart, type CartItem } from "../lib/cart";
+import { formatSAR, localNum, useI18n } from "../lib/i18n";
 import { pageUrl } from "../lib/data";
 
 /* ---------------- item row ---------------- */
@@ -32,14 +27,15 @@ function CoverStack({ covers }: { covers: string[] }) {
   );
 }
 
-function CartRow({ item }: { item: CartItem }) {
+function CartRow({ item, exitX }: { item: CartItem; exitX: number }) {
   const { setQty, removeItem } = useCart();
+  const { lang, t } = useI18n();
   return (
     <motion.li
       layout
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, x: -24, transition: { duration: 0.22 } }}
+      exit={{ opacity: 0, x: exitX, transition: { duration: 0.22 } }}
       transition={{ duration: 0.35, ease: [0.22, 0.61, 0.36, 1] }}
       className="flex gap-3 rounded-2xl border border-border bg-card p-3"
     >
@@ -53,7 +49,7 @@ function CartRow({ item }: { item: CartItem }) {
           <button
             type="button"
             onClick={() => removeItem(item.id)}
-            aria-label={`حذف ${item.title} من السلة`}
+            aria-label={`${t.cart.remove} ${item.title} ${t.cart.fromCart}`}
             className="grid size-7 shrink-0 place-items-center rounded-full text-muted-foreground transition-colors duration-300 hover:bg-secondary hover:text-primary"
           >
             <Trash2 className="size-3.5" aria-hidden="true" />
@@ -64,25 +60,25 @@ function CartRow({ item }: { item: CartItem }) {
             <button
               type="button"
               onClick={() => setQty(item.id, item.qty - 1)}
-              aria-label="إنقاص الكمية"
+              aria-label={t.cart.decrease}
               className="grid size-6 place-items-center rounded-full text-primary transition-colors duration-300 hover:bg-secondary disabled:opacity-40"
             >
               <Minus className="size-3" aria-hidden="true" />
             </button>
             <span className="min-w-6 text-center text-xs font-extrabold tabular-nums">
-              {arabicNum(item.qty)}
+              {localNum(item.qty, lang)}
             </span>
             <button
               type="button"
               onClick={() => setQty(item.id, item.qty + 1)}
-              aria-label="زيادة الكمية"
+              aria-label={t.cart.increase}
               className="grid size-6 place-items-center rounded-full text-primary transition-colors duration-300 hover:bg-secondary"
             >
               <Plus className="size-3" aria-hidden="true" />
             </button>
           </div>
           <span className="text-sm font-extrabold text-primary">
-            {formatSAR(item.price * item.qty)}
+            {formatSAR(item.price * item.qty, lang)}
           </span>
         </div>
       </div>
@@ -94,6 +90,7 @@ function CartRow({ item }: { item: CartItem }) {
 
 export default function CartDrawer() {
   const { isOpen, closeCart, items, count, subtotal, totalSave, pushToast } = useCart();
+  const { lang, dir, t } = useI18n();
   const reduced = useReducedMotion();
 
   // lock page scroll + close on Escape
@@ -113,7 +110,7 @@ export default function CartDrawer() {
 
   const checkout = () => {
     window.open(pageUrl("/stories"), "_blank", "noopener");
-    pushToast("تم فتح المتجر لإكمال الدفع");
+    pushToast(t.cart.checkoutOpened);
   };
 
   const goToPackages = () => {
@@ -125,6 +122,9 @@ export default function CartDrawer() {
     }, 120);
   };
 
+  // drawer slides from the inline-start edge (right in RTL, left in LTR)
+  const offscreen = dir === "rtl" ? "104%" : "-104%";
+  const rowExitX = dir === "rtl" ? 24 : -24;
   const spring = reduced
     ? { duration: 0.01 }
     : { type: "spring" as const, stiffness: 320, damping: 32 };
@@ -147,11 +147,11 @@ export default function CartDrawer() {
             key="drawer"
             role="dialog"
             aria-modal="true"
-            aria-label="سلة المشتريات"
-            className="fixed inset-y-0 left-0 z-[80] flex w-full max-w-md flex-col bg-background shadow-card"
-            initial={{ x: "-104%" }}
+            aria-label={t.cart.drawerLabel}
+            className="fixed inset-y-0 start-0 z-[80] flex w-full max-w-md flex-col bg-background shadow-card"
+            initial={{ x: offscreen }}
             animate={{ x: 0 }}
-            exit={{ x: "-104%" }}
+            exit={{ x: offscreen }}
             transition={spring}
           >
             {/* head */}
@@ -161,16 +161,16 @@ export default function CartDrawer() {
                   <ShoppingBag className="size-4.5" aria-hidden="true" />
                 </span>
                 <div>
-                  <h2 className="text-base font-extrabold">سلة المشتريات</h2>
+                  <h2 className="text-base font-extrabold">{t.cart.title}</h2>
                   <p className="text-[11px] font-bold text-muted-foreground">
-                    {count > 0 ? countLabel(count) : "لا توجد منتجات بعد"}
+                    {count > 0 ? t.cart.count(count) : t.cart.empty}
                   </p>
                 </div>
               </div>
               <button
                 type="button"
                 onClick={closeCart}
-                aria-label="إغلاق السلة"
+                aria-label={t.cart.close}
                 className="btn-base grid size-9 place-items-center rounded-full border border-border bg-card text-primary hover:border-gold/60"
               >
                 <X className="size-4" aria-hidden="true" />
@@ -184,23 +184,23 @@ export default function CartDrawer() {
                   <span className="grid size-20 place-items-center rounded-full bg-secondary text-primary">
                     <ShoppingBag className="size-9" aria-hidden="true" />
                   </span>
-                  <p className="font-display text-2xl text-foreground">سلتك فارغة</p>
+                  <p className="font-display text-2xl text-foreground">{t.cart.emptyTitle}</p>
                   <p className="max-w-60 text-sm leading-7 text-muted-foreground">
-                    أضف باقة موفّرة وامنح طفلك ذكرى لا تُنسى.
+                    {t.cart.emptyBody}
                   </p>
                   <button
                     type="button"
                     onClick={goToPackages}
                     className="btn-base btn-sheen mt-2 inline-flex h-10 items-center rounded-full bg-primary px-6 text-sm font-bold text-primary-foreground shadow-soft hover:bg-primary/90"
                   >
-                    استكشف الباقات
+                    {t.cart.explore}
                   </button>
                 </div>
               ) : (
                 <ul className="space-y-3">
                   <AnimatePresence initial={false}>
                     {items.map((item) => (
-                      <CartRow key={item.id} item={item} />
+                      <CartRow key={item.id} item={item} exitX={rowExitX} />
                     ))}
                   </AnimatePresence>
                 </ul>
@@ -212,18 +212,18 @@ export default function CartDrawer() {
               <div className="border-t border-border bg-card px-5 py-4">
                 <dl className="space-y-1.5 text-sm">
                   <div className="flex items-center justify-between">
-                    <dt className="text-muted-foreground">المجموع الفرعي</dt>
-                    <dd className="font-extrabold tabular-nums">{formatSAR(subtotal)}</dd>
+                    <dt className="text-muted-foreground">{t.cart.subtotal}</dt>
+                    <dd className="font-extrabold tabular-nums">{formatSAR(subtotal, lang)}</dd>
                   </div>
                   <div className="flex items-center justify-between">
-                    <dt className="text-muted-foreground">إجمالي التوفير</dt>
+                    <dt className="text-muted-foreground">{t.cart.savings}</dt>
                     <dd className="font-extrabold text-gold-foreground tabular-nums">
-                      − {formatSAR(totalSave)}
+                      − {formatSAR(totalSave, lang)}
                     </dd>
                   </div>
                   <div className="flex items-center justify-between">
-                    <dt className="text-muted-foreground">الشحن</dt>
-                    <dd className="font-extrabold text-primary">مجاني</dd>
+                    <dt className="text-muted-foreground">{t.cart.shipping}</dt>
+                    <dd className="font-extrabold text-primary">{t.cart.free}</dd>
                   </div>
                 </dl>
                 <button
@@ -231,10 +231,10 @@ export default function CartDrawer() {
                   onClick={checkout}
                   className="btn-base btn-sheen mt-4 inline-flex h-11 w-full items-center justify-center gap-2 rounded-full bg-primary text-sm font-bold text-primary-foreground shadow-soft hover:bg-primary/90"
                 >
-                  إتمام الطلب
+                  {t.cart.checkout}
                 </button>
                 <p className="mt-2.5 text-center text-[11px] text-muted-foreground">
-                  سيتم تحويلك إلى المتجر لإكمال الدفع.
+                  {t.cart.checkoutNote}
                 </p>
               </div>
             )}
@@ -256,9 +256,9 @@ export function CartToasts() {
       aria-live="polite"
     >
       <AnimatePresence>
-        {toasts.map((t) => (
+        {toasts.map((toast) => (
           <motion.div
-            key={t.id}
+            key={toast.id}
             initial={{ opacity: 0, y: 18, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 10, scale: 0.96 }}
@@ -266,7 +266,7 @@ export function CartToasts() {
             className="flex items-center gap-2.5 rounded-full bg-primary py-2.5 pr-4 pl-5 text-sm font-bold text-primary-foreground shadow-card"
           >
             <CheckCircle2 className="size-4.5 shrink-0 text-gold" aria-hidden="true" />
-            {t.message}
+            {toast.message}
           </motion.div>
         ))}
       </AnimatePresence>

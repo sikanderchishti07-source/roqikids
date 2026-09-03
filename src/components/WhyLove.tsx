@@ -1,7 +1,8 @@
 import type { FC } from "react";
 import Reveal from "./Reveal";
 import SectionHead from "./SectionHead";
-import { whyItems } from "../lib/data";
+import { whyIconKeys } from "../lib/data";
+import { useI18n } from "../lib/i18n";
 
 type IconFn = FC<{ className?: string }>;
 
@@ -35,18 +36,15 @@ const icons: Record<string, IconFn> = {
 };
 
 export default function WhyLove() {
+  const { t } = useI18n();
   return (
     <section className="bg-cream py-20">
       <div className="mx-auto max-w-6xl px-4">
-        <SectionHead
-          pill="● أكثر من مجرد كتاب"
-          title="ليه طفلك هيحب قصته؟"
-          sub="لأن أكثر بطل يريد الطفل معرفة ماذا سيحدث له… هو نفسه."
-        />
+        <SectionHead pill={t.why.pill} title={t.why.title} sub={t.why.sub} />
 
         <div className="mt-10 grid gap-6 sm:grid-cols-3">
-          {whyItems.map((item, i) => {
-            const Icon = icons[item.icon];
+          {t.why.items.map((item, i) => {
+            const Icon = icons[whyIconKeys[i]];
             return (
               <Reveal
                 key={item.title}

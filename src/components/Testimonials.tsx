@@ -2,12 +2,12 @@ import { useEffect, useRef, useState } from "react";
 import { useReducedMotion } from "framer-motion";
 import Reveal from "./Reveal";
 import SectionHead from "./SectionHead";
-import { testimonials } from "../lib/data";
+import { useI18n } from "../lib/i18n";
 import { cn } from "../lib/utils";
 
-function Stars() {
+function Stars({ label }: { label: string }) {
   return (
-    <div className="flex gap-0.5 text-gold" aria-label="تقييم 5 من 5">
+    <div className="flex gap-0.5 text-gold" aria-label={label}>
       {Array.from({ length: 5 }).map((_, i) => (
         <svg
           key={i}
@@ -28,30 +28,29 @@ function Stars() {
 }
 
 export default function Testimonials() {
+  const { t } = useI18n();
   const reduced = useReducedMotion();
   const [active, setActive] = useState(0);
   const [paused, setPaused] = useState(false);
   const timer = useRef<number | null>(null);
+  const total = t.testimonials.items.length;
 
   // soft rotating spotlight that gently fades between testimonial cards
   useEffect(() => {
     if (reduced || paused) return;
-    timer.current = window.setInterval(
-      () => setActive((a) => (a + 1) % testimonials.length),
-      4200
-    );
+    timer.current = window.setInterval(() => setActive((a) => (a + 1) % total), 4200);
     return () => {
       if (timer.current) window.clearInterval(timer.current);
     };
-  }, [reduced, paused]);
+  }, [reduced, paused, total]);
 
   return (
     <section id="testimonials" className="bg-cream py-20">
       <div className="mx-auto max-w-6xl px-4">
         <SectionHead
-          pill="● تجارب العملاء"
-          title="أجمل رد فعل؟ «ده أنا!»"
-          sub="تجارب أهالٍ عاش أطفالهم لحظة اكتشاف أنهم أبطال القصة."
+          pill={t.testimonials.pill}
+          title={t.testimonials.title}
+          sub={t.testimonials.sub}
         />
 
         <div
@@ -59,21 +58,21 @@ export default function Testimonials() {
           onMouseEnter={() => setPaused(true)}
           onMouseLeave={() => setPaused(false)}
         >
-          {testimonials.map((t, i) => {
+          {t.testimonials.items.map((item, i) => {
             const isActive = !reduced && i === active;
             return (
               <Reveal
                 as="figure"
-                key={t.name}
+                key={item.name}
                 delay={i * 140}
                 className={cn(
                   "rounded-2xl border bg-card p-7 shadow-soft transition-all duration-700 ease-out",
                   isActive ? "-translate-y-1.5 border-gold/60 shadow-card" : "border-border"
                 )}
               >
-                <Stars />
+                <Stars label={t.testimonials.rating} />
                 <blockquote className="mt-4 text-sm leading-8 text-muted-foreground">
-                  {t.quote}
+                  {item.quote}
                 </blockquote>
                 <figcaption className="mt-4 flex items-center gap-2.5 text-sm font-bold">
                   <span
@@ -82,9 +81,9 @@ export default function Testimonials() {
                       isActive && "bg-gold text-gold-foreground"
                     )}
                   >
-                    {t.name.replace("والدة ", "").replace("ماما ", "").replace("أم ", "").charAt(0)}
+                    {item.initial}
                   </span>
-                  {t.name}
+                  {item.name}
                 </figcaption>
               </Reveal>
             );

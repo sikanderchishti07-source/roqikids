@@ -2,7 +2,8 @@ import type { CSSProperties, FC } from "react";
 import { Check, Sparkles } from "lucide-react";
 import Reveal from "./Reveal";
 import SmartImage from "./SmartImage";
-import { COVERS, heroChecklist, pageUrl, trustItems } from "../lib/data";
+import { heroCovers, pageUrl, trustIconKeys } from "../lib/data";
+import { useI18n } from "../lib/i18n";
 
 type IconFn = FC<{ className?: string }>;
 
@@ -43,14 +44,8 @@ function Sparkle({ className, style }: { className?: string; style?: CSSProperti
   );
 }
 
-const heroCovers = [
-  { src: COVERS.braveAseel, alt: "غلاف قصة الأميرة الشجاعة", offset: true, eager: true },
-  { src: COVERS.captainKarim, alt: "غلاف قصة القبطان الصغير", offset: false, eager: true },
-  { src: COVERS.dinoJourney, alt: "غلاف قصة رحلة الديناصورات", offset: true, eager: false },
-  { src: COVERS.dreamCity, alt: "غلاف قصة رحلة إلى مدينة الأحلام", offset: false, eager: false },
-];
-
 export default function Hero() {
+  const { t } = useI18n();
   return (
     <section className="bg-hero relative overflow-hidden">
       {/* ambient twinkling sparkles */}
@@ -65,7 +60,7 @@ export default function Hero() {
           <Reveal variant="fade">
             <span className="inline-flex items-center gap-2 rounded-full bg-secondary px-4 py-1.5 text-xs font-bold text-primary">
               <Sparkles className="size-3.5" aria-hidden="true" />
-              هدية لن تكون مثل أي هدية
+              {t.hero.pill}
             </span>
           </Reveal>
 
@@ -76,23 +71,16 @@ export default function Hero() {
             className="font-display mt-5 text-4xl leading-[1.4] text-foreground sm:text-5xl md:text-6xl md:leading-[1.35]"
           >
             <>
-              تخيّل فرحة طفلك عندما يفتح الكتاب ويكتشف…{" "}
-              <span className="text-gradient-gold">أنه هو بطل القصة!</span>
+              {t.hero.h1a} <span className="text-gradient-gold">{t.hero.h1b}</span>
             </>
           </Reveal>
 
-          <Reveal
-            as="p"
-            variant="fade"
-            delay={280}
-            className="mt-5 max-w-lg text-base leading-8 text-muted-foreground"
-          >
-            ليست مجرد كتاب أطفال. نحوّل اسمه وصورته إلى مغامرة مصوّرة صُنعت خصيصًا له، ليقرأ عن
-            نفسه ويشاهد شخصيته داخل عالم يحبه.
+          <Reveal as="p" variant="fade" delay={280} className="mt-5 max-w-lg text-base leading-8 text-muted-foreground">
+            {t.hero.body}
           </Reveal>
 
           <ul className="mt-6 grid gap-2 sm:grid-cols-2">
-            {heroChecklist.map((item, i) => (
+            {t.hero.checklist.map((item, i) => (
               <Reveal
                 as="li"
                 key={item}
@@ -112,13 +100,13 @@ export default function Hero() {
               href={pageUrl("/stories")}
               className="btn-base btn-sheen btn-primary inline-flex h-11 items-center justify-center gap-2 rounded-full bg-primary px-7 text-sm font-bold text-primary-foreground shadow-soft hover:bg-primary/90 sm:h-12"
             >
-              ✦ اصنع قصة طفلك الآن
+              {t.hero.cta1}
             </a>
             <a
               href={pageUrl("/how-it-works")}
               className="btn-base inline-flex h-11 items-center justify-center rounded-full border border-input bg-background px-7 text-sm font-bold text-foreground shadow-sm hover:border-gold/60 hover:bg-accent hover:text-accent-foreground sm:h-12"
             >
-              شاهد كيف نصنعها
+              {t.hero.cta2}
             </a>
           </Reveal>
         </div>
@@ -130,7 +118,7 @@ export default function Hero() {
               <div key={c.src} className="floaty group" style={{ animationDelay: `${i * 0.9}s` }}>
                 <SmartImage
                   src={c.src}
-                  alt={c.alt}
+                  alt={t.hero.covers[i]}
                   eager={c.eager}
                   className={
                     "w-full rounded-2xl shadow-card transition-transform duration-500 group-hover:scale-[1.02] " +
@@ -146,11 +134,11 @@ export default function Hero() {
 
       {/* trust strip overlapping the next section */}
       <div className="relative z-10 mx-auto -mb-10 grid max-w-6xl gap-4 px-4 sm:grid-cols-2 lg:grid-cols-4">
-        {trustItems.map((t, i) => {
-          const Icon = trustIcons[t.icon];
+        {t.hero.trust.map((item, i) => {
+          const Icon = trustIcons[trustIconKeys[i]];
           return (
             <Reveal
-              key={t.title}
+              key={item.title}
               delay={i * 110}
               className="card-hover flex items-center gap-3 rounded-2xl border border-border bg-card p-4 shadow-soft"
             >
@@ -158,8 +146,8 @@ export default function Hero() {
                 <Icon className="size-5" />
               </span>
               <div>
-                <p className="text-sm font-bold">{t.title}</p>
-                <p className="text-xs text-muted-foreground">{t.sub}</p>
+                <p className="text-sm font-bold">{item.title}</p>
+                <p className="text-xs text-muted-foreground">{item.sub}</p>
               </div>
             </Reveal>
           );

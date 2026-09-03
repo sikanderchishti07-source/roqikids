@@ -2,15 +2,50 @@ import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { ShoppingBag } from "lucide-react";
 import Logo from "./Logo";
-import { arabicNum, useCart } from "../lib/cart";
-import { navLinks, pageUrl } from "../lib/data";
+import { useCart } from "../lib/cart";
+import { localNum, useI18n, type Lang } from "../lib/i18n";
+import { navHrefs, pageUrl } from "../lib/data";
 import { cn } from "../lib/utils";
+
+/** Compact AR / EN segmented switch. */
+function LangSwitch() {
+  const { lang, setLang, t } = useI18n();
+  const opts: { code: Lang; label: string }[] = [
+    { code: "ar", label: "عربي" },
+    { code: "en", label: "EN" },
+  ];
+  return (
+    <div
+      className="flex items-center rounded-full border border-border bg-card p-0.5"
+      role="group"
+      aria-label={t.langToggleLabel}
+    >
+      {opts.map((o) => (
+        <button
+          key={o.code}
+          type="button"
+          onClick={() => setLang(o.code)}
+          aria-pressed={lang === o.code}
+          className={cn(
+            "h-7 rounded-full px-2.5 text-[11px] font-extrabold transition-all duration-300",
+            lang === o.code
+              ? "bg-primary text-primary-foreground shadow-soft"
+              : "text-muted-foreground hover:text-primary"
+          )}
+        >
+          {o.label}
+        </button>
+      ))}
+    </div>
+  );
+}
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [hidden, setHidden] = useState(false);
   const [open, setOpen] = useState(false);
   const { count, openCart } = useCart();
+  const { lang, t } = useI18n();
 
   useEffect(() => {
     let last = window.scrollY;
@@ -50,29 +85,31 @@ export default function Header() {
     >
       <div
         className={cn(
-          "mx-auto flex max-w-6xl items-center justify-between px-4 transition-all duration-500",
+          "mx-auto flex max-w-6xl items-center justify-between gap-2 px-4 transition-all duration-500",
           scrolled ? "h-14 md:h-16" : "h-[72px] md:h-20"
         )}
       >
-        <Logo tagline="قصص مصوّرة باسم طفلك" />
+        <Logo tagline={t.brand.tagline} />
 
-        <nav className="hidden items-center gap-7 md:flex" aria-label="التنقل الرئيسي">
-          {navLinks.map((l) => (
+        <nav className="hidden items-center gap-7 lg:flex" aria-label={t.navLabel}>
+          {navHrefs.map((l) => (
             <a
               key={l.href}
               href={l.href}
               className="nav-link text-sm font-bold text-foreground/80 transition-colors duration-300 hover:text-primary"
             >
-              {l.label}
+              {t.nav[l.key]}
             </a>
           ))}
         </nav>
 
         <div className="flex items-center gap-2">
+          <LangSwitch />
+
           <button
             type="button"
             onClick={openCart}
-            aria-label={`فتح سلة المشتريات — ${count > 0 ? countLabelAr(count) : "فارغة"}`}
+            aria-label={`${t.cart.buttonLabel} — ${count > 0 ? t.cart.count(count) : t.cart.emptyBadge}`}
             className="btn-base relative grid size-10 place-items-center rounded-full border border-border bg-card text-primary hover:border-gold/60 hover:bg-secondary"
           >
             <ShoppingBag className="size-[18px]" aria-hidden="true" />
@@ -86,7 +123,7 @@ export default function Header() {
                   transition={{ type: "spring", stiffness: 500, damping: 24 }}
                   className="absolute -top-1 -left-1 grid size-5 place-items-center rounded-full bg-gold text-[11px] font-extrabold text-gold-foreground shadow-soft"
                 >
-                  {arabicNum(count)}
+                  {localNum(count, lang)}
                 </motion.span>
               )}
             </AnimatePresence>
@@ -94,9 +131,9 @@ export default function Header() {
 
           <a
             href={pageUrl("/stories")}
-            className="btn-base btn-sheen btn-primary hidden h-10 items-center rounded-full bg-primary px-6 text-sm font-bold text-primary-foreground shadow-soft hover:bg-primary/90 sm:inline-flex"
+            className="btn-base btn-sheen btn-primary hidden h-10 items-center rounded-full bg-primary px-6 text-sm font-bold text-primary-foreground shadow-soft hover:bg-primary/90 xl:inline-flex"
           >
-            ✦ اصنع قصة طفلك
+            {t.headerCta}
           </a>
 
           {/* hamburger */}
@@ -104,8 +141,8 @@ export default function Header() {
             type="button"
             onClick={() => setOpen((v) => !v)}
             aria-expanded={open}
-            aria-label={open ? "إغلاق القائمة" : "فتح القائمة"}
-            className="relative grid size-10 place-items-center rounded-full border border-border bg-card text-primary transition-colors duration-300 hover:border-gold/60 md:hidden"
+            aria-label={open ? t.menu.close : t.menu.open}
+            className="relative grid size-10 place-items-center rounded-full border border-border bg-card text-primary transition-colors duration-300 hover:border-gold/60 lg:hidden"
           >
             <span
               className={cn(
@@ -138,10 +175,10 @@ export default function Header() {
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.38, ease: [0.22, 0.61, 0.36, 1] }}
-            className="overflow-hidden border-t border-border/70 bg-background/95 backdrop-blur-md md:hidden"
+            className="overflow-hidden border-t border-border/70 bg-background/95 backdrop-blur-md lg:hidden"
           >
-            <nav className="flex flex-col gap-1 px-4 py-4" aria-label="قائمة الجوال">
-              {navLinks.map((l, i) => (
+            <nav className="flex flex-col gap-1 px-4 py-4" aria-label={t.menu.label}>
+              {navHrefs.map((l, i) => (
                 <motion.a
                   key={l.href}
                   href={l.href}
@@ -151,7 +188,7 @@ export default function Header() {
                   transition={{ delay: 0.08 + i * 0.06, duration: 0.3 }}
                   className="rounded-xl px-3 py-2.5 text-sm font-bold text-foreground/85 transition-colors duration-300 hover:bg-secondary hover:text-primary"
                 >
-                  {l.label}
+                  {t.nav[l.key]}
                 </motion.a>
               ))}
               <motion.a
@@ -161,7 +198,7 @@ export default function Header() {
                 transition={{ delay: 0.4, duration: 0.3 }}
                 className="btn-base btn-sheen btn-primary mt-2 inline-flex h-11 items-center justify-center rounded-full bg-primary px-6 text-sm font-bold text-primary-foreground shadow-soft"
               >
-                ✦ اصنع قصة طفلك الآن
+                {t.hero.cta1}
               </motion.a>
             </nav>
           </motion.div>
@@ -169,10 +206,4 @@ export default function Header() {
       </AnimatePresence>
     </header>
   );
-}
-
-function countLabelAr(n: number) {
-  if (n === 1) return "منتج واحد";
-  if (n === 2) return "منتجان";
-  return `${arabicNum(n)} منتجات`;
 }

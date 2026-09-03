@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { ArrowUp } from "lucide-react";
 import { cn } from "../lib/utils";
+import { useI18n } from "../lib/i18n";
 
 /** Thin gold reading-progress bar pinned to the very top. */
 function ProgressBar() {
@@ -30,8 +31,8 @@ function ProgressBar() {
   return (
     <div className="fixed inset-x-0 top-0 z-[60] h-[3px] bg-transparent" aria-hidden="true">
       <div
-        className="h-full rounded-full bg-gradient-to-l from-[#b8842b] via-gold to-[#e7c26c] transition-[width] duration-150 ease-out"
-        style={{ width: `${progress * 100}%`, marginLeft: "auto" }}
+        className="progress-fill h-full rounded-full transition-[width] duration-150 ease-out"
+        style={{ width: `${progress * 100}%` }}
       />
     </div>
   );
@@ -39,6 +40,7 @@ function ProgressBar() {
 
 /** Floating back-to-top button that fades in after scrolling. */
 function BackToTop() {
+  const { t } = useI18n();
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
@@ -65,9 +67,9 @@ function BackToTop() {
     <button
       type="button"
       onClick={toTop}
-      aria-label="العودة إلى الأعلى"
+      aria-label={t.backToTop}
       className={cn(
-        "btn-base btn-sheen btn-primary fixed bottom-5 left-5 z-50 grid size-11 place-items-center rounded-full bg-primary text-primary-foreground shadow-lift transition-all duration-500 hover:bg-primary/90",
+        "btn-base btn-sheen btn-primary fixed bottom-5 end-5 z-50 grid size-11 place-items-center rounded-full bg-primary text-primary-foreground shadow-lift transition-all duration-500 hover:bg-primary/90",
         visible ? "translate-y-0 opacity-100" : "pointer-events-none translate-y-6 opacity-0"
       )}
     >

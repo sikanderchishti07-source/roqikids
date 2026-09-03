@@ -31,6 +31,32 @@ html {
   scroll-padding-top: 96px;
 }
 
+/* English mode swaps the display face for a matching playful Latin one */
+html[data-lang="en"] {
+  --font-display: "Fredoka", "Tajawal", system-ui, sans-serif;
+}
+
+/* soft crossfade when switching languages */
+@keyframes langfade {
+  from {
+    opacity: 0.25;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.lang-fade {
+  animation: langfade 0.45s ease-out;
+}
+
+/* reading progress fill follows the inline direction */
+.progress-fill {
+  background-image: linear-gradient(to left, #b8842b, #d9a741, #e7c26c);
+}
+html[dir="ltr"] .progress-fill {
+  background-image: linear-gradient(to right, #b8842b, #d9a741, #e7c26c);
+}
+
 body {
   font-family: var(--font-sans);
   background-color: var(--color-background);

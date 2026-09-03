@@ -8,6 +8,7 @@ import {
   useState,
   type ReactNode,
 } from "react";
+import { useI18n } from "./i18n";
 
 export type CartItem = {
   id: string;
@@ -30,10 +31,7 @@ type CartCtx = {
   toasts: Toast[];
   openCart: () => void;
   closeCart: () => void;
-  addItem: (
-    item: Omit<CartItem, "qty">,
-    opts?: { silent?: boolean }
-  ) => void;
+  addItem: (item: Omit<CartItem, "qty">, opts?: { silent?: boolean }) => void;
   removeItem: (id: string) => void;
   setQty: (id: string, qty: number) => void;
   pushToast: (message: string) => void;
@@ -41,19 +39,6 @@ type CartCtx = {
 
 const Ctx = createContext<CartCtx | null>(null);
 const STORAGE_KEY = "ruqi-cart-v1";
-
-const AR_DIGITS = "٠١٢٣٤٥٦٧٨٩";
-export const arabicNum = (n: number) =>
-  String(n).replace(/\d/g, (d) => AR_DIGITS[Number(d)]);
-
-export const formatSAR = (n: number) => `${arabicNum(n)} ر.س`;
-
-export function countLabel(n: number) {
-  if (n === 1) return "منتج واحد";
-  if (n === 2) return "منتجان";
-  if (n >= 3 && n <= 10) return `${arabicNum(n)} منتجات`;
-  return `${arabicNum(n)} منتجًا`;
-}
 
 function loadCart(): CartItem[] {
   try {
@@ -74,14 +59,17 @@ function loadCart(): CartItem[] {
 }
 
 export function CartProvider({ children }: { children: ReactNode }) {
+  const { t } = useI18n();
   const [items, setItems] = useState<CartItem[]>(loadCart);
   const [isOpen, setIsOpen] = useState(false);
   const [toasts, setToasts] = useState<Toast[]>([]);
   const toastId = useRef(0);
   const itemsRef = useRef(items);
-
   useEffect(() => {
     itemsRef.current = items;
+  }, [items]);
+
+  useEffect(() => {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
     } catch {
@@ -91,9 +79,9 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   const pushToast = useCallback((message: string) => {
     const id = ++toastId.current;
-    setToasts((t) => [...t.slice(-2), { id, message }]);
+    setToasts((ts) => [...ts.slice(-2), { id, message }]);
     window.setTimeout(
-      () => setToasts((t) => t.filter((x) => x.id !== id)),
+      () => setToasts((ts) => ts.filter((x) => x.id !== id)),
       2600
     );
   }, []);
@@ -112,22 +100,20 @@ export function CartProvider({ children }: { children: ReactNode }) {
       });
       if (!opts?.silent) {
         pushToast(
-          existed
-            ? `تمت زيادة كمية «${item.title}»`
-            : `أُضيفت «${item.title}» إلى السلة`
+          existed ? t.cart.increased(item.title) : t.cart.added(item.title)
         );
       }
     },
-    [pushToast]
+    [pushToast, t]
   );
 
   const removeItem = useCallback(
     (id: string) => {
       const target = itemsRef.current.find((i) => i.id === id);
       setItems((prev) => prev.filter((i) => i.id !== id));
-      if (target) pushToast(`أُزيلت «${target.title}» من السلة`);
+      if (target) pushToast(t.cart.removed(target.title));
     },
-    [pushToast]
+    [pushToast, t]
   );
 
   const setQty = useCallback((id: string, qty: number) => {

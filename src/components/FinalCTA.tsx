@@ -1,6 +1,7 @@
 import type { CSSProperties } from "react";
 import Reveal from "./Reveal";
 import { pageUrl } from "../lib/data";
+import { useI18n } from "../lib/i18n";
 
 function Sparkle({ className, style }: { className?: string; style?: CSSProperties }) {
   return (
@@ -11,6 +12,7 @@ function Sparkle({ className, style }: { className?: string; style?: CSSProperti
 }
 
 export default function FinalCTA() {
+  const { t } = useI18n();
   return (
     <section className="mx-auto max-w-6xl px-4 pb-4">
       <Reveal className="relative overflow-hidden rounded-3xl bg-primary px-6 py-14 text-center text-primary-foreground shadow-card">
@@ -30,23 +32,21 @@ export default function FinalCTA() {
         <Sparkle className="floaty absolute bottom-12 left-[22%] size-3.5 text-gold/40" style={{ animationDelay: "2.6s" }} />
 
         <div className="relative">
-          <p className="text-sm font-bold opacity-80">✦ الآن جاء دور طفلك</p>
+          <p className="text-sm font-bold opacity-80">{t.final.kicker}</p>
           <Reveal
             as="h2"
             variant="mask"
             delay={120}
             className="font-display mt-3 text-3xl sm:text-4xl"
           >
-            جاهز تخلي طفلك بطل قصته؟
+            {t.final.title}
           </Reveal>
-          <p className="mx-auto mt-3 max-w-xl text-sm leading-8 opacity-80">
-            اختر الحكاية والمقاس المناسب، أضفها إلى السلة، وأكمل طلبك في أقل من 3 دقائق.
-          </p>
+          <p className="mx-auto mt-3 max-w-xl text-sm leading-8 opacity-80">{t.final.body}</p>
           <a
             href={pageUrl("/stories")}
             className="btn-base btn-sheen mt-7 inline-flex h-11 items-center justify-center rounded-full bg-secondary px-8 text-sm font-bold text-secondary-foreground shadow-sm hover:bg-secondary/85"
           >
-            ابدأ قصة طفلك
+            {t.final.cta}
           </a>
         </div>
       </Reveal>

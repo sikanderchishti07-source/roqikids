@@ -2,7 +2,8 @@ import type { FC } from "react";
 import { Check } from "lucide-react";
 import Reveal from "./Reveal";
 import SectionHead from "./SectionHead";
-import { pageUrl, sizeNote, sizes, specs } from "../lib/data";
+import { pageUrl, sizeDims, sizeTags, specIconKeys } from "../lib/data";
+import { useI18n } from "../lib/i18n";
 import { cn } from "../lib/utils";
 
 type IconFn = FC<{ className?: string }>;
@@ -48,18 +49,15 @@ const specIcons: Record<string, IconFn> = {
 };
 
 export default function Sizes() {
+  const { t } = useI18n();
   return (
     <section id="sizes" className="mx-auto max-w-6xl px-4 py-20">
-      <SectionHead
-        pill="● اختر الحجم المناسب"
-        title="متاحة بمقاسي A4 و A5"
-        sub="نفس القصة ونفس الجودة، الفرق في الحجم وتجربة المشاهدة."
-      />
+      <SectionHead pill={t.sizes.pill} title={t.sizes.title} sub={t.sizes.sub} />
 
       <div className="mt-10 grid gap-6 md:grid-cols-2">
-        {sizes.map((s, i) => (
+        {t.sizes.items.map((s, i) => (
           <Reveal
-            key={s.tag}
+            key={sizeTags[i]}
             delay={i * 150}
             className={cn(
               "card-hover rounded-3xl border bg-card p-7 shadow-soft",
@@ -68,13 +66,13 @@ export default function Sizes() {
           >
             <div className="flex items-center justify-between">
               <span className="grid size-12 place-items-center rounded-2xl bg-secondary text-sm font-extrabold text-primary">
-                {s.tag}
+                {sizeTags[i]}
               </span>
               <span className="text-2xl font-extrabold">{s.price}</span>
             </div>
             <h3 className="mt-4 text-lg font-bold">{s.title}</h3>
-            <p className="text-sm text-muted-foreground" dir="ltr" style={{ textAlign: "right" }}>
-              {s.dims}
+            <p className="text-start text-sm text-muted-foreground" dir="ltr">
+              {sizeDims[i]}
             </p>
             <p className="mt-3 flex items-center gap-2 text-sm text-muted-foreground">
               <Check className="size-4 shrink-0 text-primary" aria-hidden="true" />
@@ -91,12 +89,12 @@ export default function Sizes() {
       </div>
 
       <Reveal as="p" variant="fade" delay={200} className="mt-6 text-center text-xs text-muted-foreground">
-        {sizeNote}
+        {t.sizes.note}
       </Reveal>
 
       <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {specs.map((s, i) => {
-          const Icon = specIcons[s.icon];
+        {t.sizes.specs.map((s, i) => {
+          const Icon = specIcons[specIconKeys[i]];
           return (
             <Reveal
               key={s.title}
